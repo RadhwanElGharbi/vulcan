@@ -31,6 +31,7 @@ export function WorkspaceDirectory({ onChanged }: { onChanged: () => void }) {
     } finally { if (mounted.current) setBusy(false) }
   }
 
+  if (process.env.NEXT_PUBLIC_WEB_PREVIEW === '1') return <div className="px-8 py-3 border-b border-white/10 text-xs text-white/50">Cloud project storage is not connected yet.</div>
   return <>
     <div className="flex items-center gap-3 px-8 py-3 border-b border-white/10 bg-white/[0.02]">
       <Folder className="w-4 h-4 shrink-0 text-white/40" />

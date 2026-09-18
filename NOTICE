@@ -1,0 +1,10 @@
+Vulcan
+Copyright 2026 Colony Dynamics Inc.
+
+Original Vulcan code is distributed under Colony Open License v1.0.
+The licence text is adapted from Liquid AI's LFM Open License v1.0,
+which is based on Apache License 2.0. This is a distinct custom licence.
+Liquid AI and the Apache Software Foundation do not endorse Vulcan.
+
+Third-party components and fetched datasets retain their respective licences
+and attribution requirements. See docs/LICENSING.md.

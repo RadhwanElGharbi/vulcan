@@ -6,6 +6,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 files = [ROOT/'start-companion.ps1', ROOT/'start-companion.cmd', ROOT/'tests/verify_runtime_archives.py']
+files += [ROOT/name for name in ('LICENSE', 'NOTICE') if (ROOT/name).is_file()]
 files += [p for p in (ROOT/'apps/api').rglob('*') if p.is_file() and p.suffix in {'.py','.ps1','.txt','.json'} and '__pycache__' not in p.parts]
 for name in ['reference-runtime/conda-win-64.txt','reference-runtime/pip-win-64.txt','reference-runtime/lock.json',
              'WORLD_DATASET_CATALOGUE.csv','catalogue-assessment.json','DATASET_FETCHING_PROTOCOLS.md','providers.json']:

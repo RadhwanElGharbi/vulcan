@@ -9,6 +9,11 @@ export function CompanionGate({ children }: { children: ReactNode }) {
   const [connected, setConnected] = useState(false)
   const [busy, setBusy] = useState(false)
   const [error, setError] = useState<string | null>(null)
+  if (process.env.NEXT_PUBLIC_WEB_PREVIEW === '1') return <>{children}
+    <div role="status" className="fixed bottom-4 left-1/2 -translate-x-1/2 z-40 rounded border border-white/10 bg-black/70 backdrop-blur-md px-4 py-2 text-xs text-white/60">
+      Preview · Cloud project storage and fetching are not connected yet.
+    </div>
+  </>
   if (process.env.NEXT_PUBLIC_CLOUD_MODE === '1') return <CloudWorkspaceGate>{children}</CloudWorkspaceGate>
   if (process.env.NEXT_PUBLIC_COMPANION_MODE !== '1' || connected) return <>{children}</>
 

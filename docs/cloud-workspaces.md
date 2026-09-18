@@ -2,8 +2,11 @@
 
 Implementation is opt-in and not deployed to production yet. The existing
 Vercel static website cannot run this long-lived Python/GDAL worker by itself.
-An actual backend host and a qualified runtime must be configured before switching
-the production website away from companion mode.
+The default hosted build opens the GUI directly in preview mode. It does not
+connect to a visitor's computer, create projects or claim that cloud storage is
+available. An actual backend host and a qualified runtime must be configured
+before enabling cloud operations. Explicit `VULCAN_DEPLOY_MODE=companion` retains
+the old companion interface for deployments that need it.
 
 Each browser gets an opaque, HttpOnly, Secure, SameSite=Strict cookie. Only its
 SHA-256 is persisted in the session ledger. Projects, raw inputs, acquisition

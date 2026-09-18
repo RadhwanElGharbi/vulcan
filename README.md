@@ -78,4 +78,4 @@ npm run build
 
 `tests/research-provider-discovery.json` records dated discovery checks. `tests/research-live-acquisition.json` records separate live acquisitions and two offline replays, with full evidence under `.runtime/qualification/`. Immutable fixture tests do not depend on provider availability. Missing ERA5 credentials and service errors remain unresolved verification items.
 
-No software licence has been chosen for this extraction. Provider data terms and attribution are recorded independently of any eventual software licence.
+Vulcan is source-available under the [Colony Open License v1.0](LICENSE), adapted from Liquid AI's LFM Open License, with Colony Dynamics Inc. as licensor. Commercial use at or above US$10 million in annual revenue requires a separate licence. This is a custom licence, not Apache-2.0 or OSI open source. See [licensing details](docs/LICENSING.md); provider data and third-party components retain their own terms.

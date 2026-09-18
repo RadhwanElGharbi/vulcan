@@ -180,9 +180,7 @@ export function ProjectSelectionDialog({
                   Project Index
                 </h2>
                 <div className="flex items-center gap-2 text-[10px] text-muted-foreground font-mono uppercase tracking-wider mt-1">
-                  <span className="text-emerald-500">● System Online</span>
-                  <span>|</span>
-                  <span>Local Workspace</span>
+                  <span>{process.env.NEXT_PUBLIC_WEB_PREVIEW === '1' ? 'Preview workspace' : process.env.NEXT_PUBLIC_CLOUD_MODE === '1' ? 'Temporary workspace' : 'Local workspace'}</span>
                 </div>
               </div>
             </div>
@@ -200,7 +198,7 @@ export function ProjectSelectionDialog({
                 <div className="w-px h-6 bg-white/10" />
                 <div className="flex flex-col items-end">
                   <span className="text-[10px] text-muted-foreground font-mono uppercase">Status</span>
-                  <span className="text-sm font-mono font-bold text-emerald-400">ACTIVE</span>
+                  <span className="text-sm font-mono font-bold text-white/60">{process.env.NEXT_PUBLIC_WEB_PREVIEW === '1' ? 'PREVIEW' : 'ACTIVE'}</span>
                 </div>
               </div>
 

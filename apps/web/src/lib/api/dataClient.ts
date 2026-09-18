@@ -498,6 +498,7 @@ export interface GeoJSON {
 }
 
 export async function fetchProjects(): Promise<ProjectMetadata[]> {
+  if (process.env.NEXT_PUBLIC_WEB_PREVIEW === '1') return []
   const base = await getApiBaseAsync();
   const headers: HeadersInit = {};
   const response = await fetch(`${base}/projects`, { headers });

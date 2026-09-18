@@ -117,7 +117,7 @@ export function CreateProjectWizard({ open, onClose, onCreated }: CreateProjectW
       trackEvent('dialog', 'CreateProjectWizard', 'open_create_project_wizard')
       setIsClosing(false)
     } else {
-      setTimeout(() => {
+      const resetTimer = setTimeout(() => {
         setStepIndex(0)
         setAoiSummary(null)
         setCrsSelection(null)
@@ -132,6 +132,7 @@ export function CreateProjectWizard({ open, onClose, onCreated }: CreateProjectW
 
 
       }, 200)
+      return () => clearTimeout(resetTimer)
     }
   }, [open])
 
@@ -183,6 +184,10 @@ export function CreateProjectWizard({ open, onClose, onCreated }: CreateProjectW
   }, [stepIndex, projectName, aoiSummary])
 
   const handleAoiPreview = async (options?: {geojson?: any; file?: File}) => {
+    if (process.env.NEXT_PUBLIC_WEB_PREVIEW === '1') {
+      setPreviewError('AOI captured for this session. Connect cloud processing to determine its country and CRS and create the project.')
+      return
+    }
     setPreviewLoading(true)
     setPreviewError(null)
     try {
@@ -438,7 +443,7 @@ export function CreateProjectWizard({ open, onClose, onCreated }: CreateProjectW
                   }
                   setStepIndex(Math.min(STEPS.length - 1, stepIndex + 1))
                 }}
-                disabled={!isStepValid || submitState.loading || !saveDirectory}
+                disabled={!isStepValid || submitState.loading}
                 className={cn(
                   'flex items-center gap-2 px-6 py-2 text-xs font-mono uppercase tracking-wider rounded-sm border transition-all',
                   isStepValid
@@ -918,6 +923,7 @@ function AOIDrawOverlay({ open, onClose, onSave }: AOIDrawOverlayProps) {
   const [currentArea, setCurrentArea] = useState<number>(0)
   const [areaExceeded, setAreaExceeded] = useState(false)
   const [isDrawing, setIsDrawing] = useState(false)
+  const [drawReady, setDrawReady] = useState(false)
   const [hasValidAOI, setHasValidAOI] = useState(false)
   const [polygonCoords, setPolygonCoords] = useState<[number, number][] | null>(null)
   const polygonCoordsRef = useRef<[number, number][] | null>(null)
@@ -981,6 +987,16 @@ function AOIDrawOverlay({ open, onClose, onSave }: AOIDrawOverlayProps) {
   useEffect(() => {
     if (!open || !mapContainerRef.current) return
 
+    setDrawReady(false)
+    setStatusMessage('Preparing drawing tools…')
+    maplibregl.setWorkerUrl('/maplibre/maplibre-gl-worker.mjs')
+    // Mapbox Draw's hit testing, keyboard handling and control CSS must use
+    // MapLibre's class names. See MapLibre's official Draw integration.
+    Object.assign(MapboxDraw.constants.classes, {
+      CANVAS: 'maplibregl-canvas', CONTROL_BASE: 'maplibregl-ctrl',
+      CONTROL_PREFIX: 'maplibregl-ctrl-', CONTROL_GROUP: 'maplibregl-ctrl-group',
+      ATTRIBUTION: 'maplibregl-ctrl-attrib',
+    })
     const map = new maplibregl.Map({
       container: mapContainerRef.current,
       style: {
@@ -1064,8 +1080,9 @@ function AOIDrawOverlay({ open, onClose, onSave }: AOIDrawOverlayProps) {
     map.on('rotate', enforce2D)
     map.on('rotatestart', enforce2D)
 
-    // Wait for map to load before adding draw controls
-    map.on('load', () => {
+    // Draw connects its input listeners when the map is loaded. Keep the
+    // toolbar disabled until that connection is established.
+    map.once('load', () => {
       const draw = new MapboxDraw({
         displayControlsDefault: false,
         controls: {
@@ -1255,6 +1272,11 @@ function AOIDrawOverlay({ open, onClose, onSave }: AOIDrawOverlayProps) {
       })
       drawEvents.on('draw.update', updateArea)
       drawEvents.on('draw.delete', updateArea)
+      setDrawReady(true)
+      draw.changeMode('draw_polygon')
+      setIsDrawing(true)
+      isDrawingRef.current = true
+      setStatusMessage('Click to add vertices. Click the first vertex or double-click to finish.')
     })
 
     // Note: Start/end point click handling is done via a React overlay div
@@ -1271,6 +1293,7 @@ function AOIDrawOverlay({ open, onClose, onSave }: AOIDrawOverlayProps) {
       setCurrentArea(0)
       setAreaExceeded(false)
       setIsDrawing(false)
+      setDrawReady(false)
       isDrawingRef.current = false
       setHasValidAOI(false)
       setPolygonCoords(null)
@@ -1310,8 +1333,10 @@ function AOIDrawOverlay({ open, onClose, onSave }: AOIDrawOverlayProps) {
   const startDrawPolygon = () => {
     const draw = drawRef.current
     if (draw) {
+      setSelectMode(null)
       draw.changeMode('draw_polygon')
       setIsDrawing(true)
+      isDrawingRef.current = true
       setStatusMessage('Click on map to add polygon vertices. Double-click to finish.')
       reportAction('click-draw-polygon')
     }
@@ -1510,19 +1535,19 @@ function AOIDrawOverlay({ open, onClose, onSave }: AOIDrawOverlayProps) {
   return createPortal(
     <div className="fixed inset-0 z-[300] bg-black flex flex-col">
       {/* Header toolbar */}
-      <div className="flex items-center justify-between px-4 py-3 border-b border-white/10 bg-black/80 backdrop-blur-sm">
-        <div className="flex items-center gap-4">
-          <div>
+      <div className="flex h-16 shrink-0 items-center justify-between gap-4 px-4 py-3 border-b border-white/10 bg-black/80 backdrop-blur-sm">
+        <div className="flex min-w-0 items-center gap-4">
+          <div className="min-w-0">
             <div className="text-xs font-mono uppercase text-white/50 tracking-widest">AOI Drawing Console</div>
             <div className={cn(
-              "text-sm mt-0.5",
+              "text-sm mt-0.5 truncate",
               areaExceeded ? "text-red-400 font-semibold" : "text-white/70"
-            )}>{statusMessage}</div>
+            )} title={statusMessage}>{statusMessage}</div>
           </div>
           {/* Area indicator badge - show live preview during drawing, otherwise show current area */}
           {(livePreviewArea !== null || currentArea > 0) && (
             <div className={cn(
-              "px-3 py-1.5 text-sm font-mono rounded border flex items-center gap-2",
+              "shrink-0 whitespace-nowrap px-3 py-1.5 text-sm font-mono rounded border flex items-center gap-2",
               livePreviewArea !== null
                 ? livePreviewExceeded
                   ? "border-red-500 bg-red-500/20 text-red-400 animate-pulse"
@@ -1542,10 +1567,11 @@ function AOIDrawOverlay({ open, onClose, onSave }: AOIDrawOverlayProps) {
             </div>
           )}
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex shrink-0 items-center gap-2">
           {/* Draw Polygon Button */}
           <button
             onClick={startDrawPolygon}
+            disabled={!drawReady}
             data-tour="draw-polygon-btn"
             className={cn(
               'px-3 py-2 text-xs font-mono uppercase tracking-widest rounded border transition-all flex items-center gap-2',
@@ -1563,6 +1589,7 @@ function AOIDrawOverlay({ open, onClose, onSave }: AOIDrawOverlayProps) {
           {/* Delete Button */}
           <button
             onClick={deleteAllDrawings}
+            disabled={!drawReady}
             className="px-3 py-2 text-xs font-mono uppercase tracking-widest rounded border border-white/20 text-white/70 hover:border-red-500 hover:text-red-400 hover:bg-red-500/10 transition-all flex items-center gap-2"
             title="Delete All"
           >

@@ -88,7 +88,7 @@ export function ProjectProvider({ children }: ProjectProviderProps) {
 
   // Seed projects from cache (if available) before hitting API
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    if (typeof window === 'undefined' || process.env.NEXT_PUBLIC_WEB_PREVIEW === '1') return
     const cached = parseProjectsCache(localStorage.getItem(PROJECTS_CACHE_KEY))
     if (cached.length > 0) {
       setProjects((prev) => (prev.length === 0 ? cached : prev))
@@ -323,6 +323,5 @@ export function useProject() {
 
   return context
 }
-
 
 

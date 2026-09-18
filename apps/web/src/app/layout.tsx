@@ -4,6 +4,8 @@ import { ProjectProvider } from '@/lib/context/ProjectContext'
 import { CompanionGate } from '@/components/shared/CompanionGate'
 import type { Metadata } from 'next'
 import { Cinzel,Inter } from 'next/font/google'
+import 'maplibre-gl/dist/maplibre-gl.css'
+import '@mapbox/mapbox-gl-draw/dist/mapbox-gl-draw.css'
 import './globals.css'
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })

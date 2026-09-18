@@ -18,3 +18,4 @@ __pycache__/
 !.env.example
 tests/*.png
 apps/web/public/cesium/
+apps/web/public/maplibre/

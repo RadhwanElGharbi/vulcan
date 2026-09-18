@@ -42,6 +42,12 @@ def write_bundle(path, plan, job, report, store, base):
                     add("outputs/"+item[key], source)
         content("runtime-lock.json", plan["runtime"])
         from .store import ROOT
+        # Bundles distribute the preserved replay implementation, so retain
+        # its software licence separately from provider data terms.
+        for name in ('LICENSE', 'NOTICE'):
+            source = ROOT / name
+            if source.is_file():
+                add(name, source)
         reference = ROOT / 'docs/datasets/reference-runtime'
         if reference.is_dir():
             for source in sorted(reference.iterdir()):

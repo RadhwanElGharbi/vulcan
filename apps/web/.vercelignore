@@ -5,3 +5,5 @@ out
 *.tsbuildinfo
 public/test-maplibre.html
 public/cesium
+public/maplibre
+public/downloads

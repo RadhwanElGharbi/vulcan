@@ -10,7 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def selected_files():
-    for name in ('README.md', '.gitignore', 'environment.yml', 'start-local.ps1', 'start-companion.ps1', 'start-companion.cmd', 'LICENSE'):
+    for name in ('README.md', '.gitignore', 'environment.yml', 'start-local.ps1', 'start-companion.ps1', 'start-companion.cmd', 'LICENSE', 'NOTICE'):
         if (ROOT/name).is_file(): yield ROOT/name
     for folder, extensions in [
         ('apps/api', {'.py', '.ps1', '.txt'}),

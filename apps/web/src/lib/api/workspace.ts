@@ -4,6 +4,7 @@ export type Workspace = { directory: string; directories: string[]; mode?: 'temp
 export type DirectoryListing = { directory: string; parent: string | null; shortcuts: string[]; folders: { name: string; path: string }[]; truncated: boolean }
 
 async function request<T>(path: string, options?: RequestInit): Promise<T> {
+  if (process.env.NEXT_PUBLIC_WEB_PREVIEW === '1') throw new Error('Cloud storage is not connected yet. You can explore the globe and draw an AOI.')
   const response = await fetch(`${getApiBase()}${path}`, { cache: 'no-store', ...options })
   const body = await response.json()
   if (!response.ok) throw new Error(typeof body.detail === 'string' ? body.detail : 'Could not access the project directory.')
