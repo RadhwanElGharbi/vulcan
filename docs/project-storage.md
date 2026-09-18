@@ -25,6 +25,6 @@ file path. The original `AGRS_PROJECTS_ROOT` remains indexed. Settings are read 
 both API and worker processes and survive restarts. An invalid settings file
 causes an error rather than silently changing the save location.
 
-Verification: `qa/test_workspace_directory.py` covers discovery, persistence in a
+Verification: `tests/test_workspace_directory.py` covers discovery, persistence in a
 fresh process, duplicate names, invalid destinations, failed settings writes,
 standard project creation and reading the saved project after changing location.

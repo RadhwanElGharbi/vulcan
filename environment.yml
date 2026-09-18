@@ -12,4 +12,4 @@ dependencies:
   - curl
   - pip
   - pip:
-      - -r gui-v2/backend/requirements.txt
+      - -r apps/api/requirements.txt

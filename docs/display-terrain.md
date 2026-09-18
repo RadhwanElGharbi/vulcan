@@ -36,6 +36,6 @@ Project changes and provider replacement abort pending requests and discard the
 previous provider's cache. Scientific artifact/recipe hashes identify frontend
 requests, and retained preview identities identify backend tile caches.
 
-Offline verification: `qa/test_display_terrain.py` and
-`qa/test_display_terrain.cjs`. These cover coverage, NoData, AOI holes, units,
+Offline verification: `tests/test_display_terrain.py` and
+`tests/test_display_terrain.cjs`. These cover coverage, NoData, AOI holes, units,
 overlap precedence, shared tile edges and background sampling limits.

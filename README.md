@@ -8,13 +8,29 @@ The scientific acquisition implementation is in progress. The replacement pipeli
 
 ## Run locally
 
+Repository layout:
+
+```text
+apps/
+  web/                 Next.js interface and Cesium globe
+  api/                 Python API and acquisition worker
+tests/                 Regression tests, fixtures and verification tools
+tools/                 Source publication utilities
+docs/                  Architecture, provider contracts and runtime locks
+start-local.ps1        Start the local website and API
+start-companion.ps1    Start the companion API for the hosted website
+start-companion.cmd    Windows double-click companion launcher
+```
+
+Saved projects remain in `Projects/` (or the directory selected in the app).
+
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\Start-Zeus.ps1
+powershell -NoProfile -ExecutionPolicy Bypass -File .\start-local.ps1
 ```
 
 Open **http://localhost:3001**. The API listens on `127.0.0.1:8000`. The launcher uses `%LOCALAPPDATA%\zeus-runtime` and Node.js 22. Logs are under `.runtime/`.
 
-For a fresh environment, follow [the reference runtime instructions](docs/datasets/reference-runtime/README.md), then run `npm ci` in `gui-v2/frontend`. `environment.yml` is a convenient development solve; it is not the reference lock. Linux and macOS have not been qualified for scientific replay equality.
+For a fresh environment, follow [the reference runtime instructions](docs/datasets/reference-runtime/README.md), then run `npm ci` in `apps/web`. `environment.yml` is a convenient development solve; it is not the reference lock. Linux and macOS have not been qualified for scientific replay equality.
 
 ## Acquire and review
 
@@ -42,7 +58,7 @@ python zeus_replay.py --output replay-result
 
 The bundle includes exact provider objects/responses, discovery evidence, plan, validation report, event history, artifacts and the preserved replay implementation. The command verifies integrity, performs offline processing and compares scientific-content hashes and validation decisions. Operational timestamps and container bytes can differ; every stored artifact also has its own SHA-256.
 
-To inspect an older artifact without changing its provenance status, run from `gui-v2/backend` in the reference environment:
+To inspect an older artifact without changing its provenance status, run from `apps/api` in the reference environment:
 
 ```powershell
 python -m api.dataset_fetch.research.legacy --project PROJECT --artifact data/rasters/processed/FILE.tif --output NEW_REPORT_DIRECTORY
@@ -53,13 +69,13 @@ The command preserves a snapshot and reports present grid, value, geometry and c
 ## Verification
 
 ```powershell
-& "$env:LOCALAPPDATA\zeus-runtime\python.exe" -m pytest qa/test_research_acquisition.py -W error::RuntimeWarning -q
-& "$env:LOCALAPPDATA\zeus-runtime\python.exe" qa/lock_reference_runtime.py
-# In gui-v2/frontend, without disturbing the development build:
+& "$env:LOCALAPPDATA\zeus-runtime\python.exe" -m pytest tests/test_research_acquisition.py -W error::RuntimeWarning -q
+& "$env:LOCALAPPDATA\zeus-runtime\python.exe" tests/lock_reference_runtime.py
+# In apps/web, without disturbing the development build:
 $env:ZEUS_BUILD_DIR = '.next-build'
 npm run build
 ```
 
-`qa/research-provider-discovery.json` records dated discovery checks. `qa/research-live-acquisition.json` records separate live acquisitions and two offline replays, with full evidence under `.runtime/qualification/`. Immutable fixture tests do not depend on provider availability. Missing ERA5 credentials and service errors remain unresolved verification items.
+`tests/research-provider-discovery.json` records dated discovery checks. `tests/research-live-acquisition.json` records separate live acquisitions and two offline replays, with full evidence under `.runtime/qualification/`. Immutable fixture tests do not depend on provider availability. Missing ERA5 credentials and service errors remain unresolved verification items.
 
 No software licence has been chosen for this extraction. Provider data terms and attribution are recorded independently of any eventual software licence.

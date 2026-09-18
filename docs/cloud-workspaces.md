@@ -34,7 +34,7 @@ VULCAN_PACKAGE_MAX_BYTES=21474836480
 ```
 
 Start `python -m uvicorn main:app --host 127.0.0.1 --port 8000 --workers 1`
-from `gui-v2/backend`, behind an HTTPS reverse proxy. Give the service a dedicated
+from `apps/api`, behind an HTTPS reverse proxy. Give the service a dedicated
 volume with an actual disk quota and CPU/memory limits. The application checks
 workspace usage periodically; this is not a substitute for filesystem quotas.
 Rate-limit workspace creation and expensive operations at ingress, and cap upload

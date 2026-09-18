@@ -10,15 +10,15 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def selected_files():
-    for name in ('README.md', '.gitignore', 'environment.yml', 'Start-Zeus.ps1', 'Start-Vulcan.ps1', 'Start VULCAN.cmd', 'LICENSE'):
+    for name in ('README.md', '.gitignore', 'environment.yml', 'start-local.ps1', 'start-companion.ps1', 'start-companion.cmd', 'LICENSE'):
         if (ROOT/name).is_file(): yield ROOT/name
     for folder, extensions in [
-        ('gui-v2/backend', {'.py', '.ps1', '.txt'}),
-        ('gui-v2/frontend/src', {'.ts', '.tsx', '.css'}),
-        ('gui-v2/frontend/tools', {'.cjs'}),
+        ('apps/api', {'.py', '.ps1', '.txt'}),
+        ('apps/web/src', {'.ts', '.tsx', '.css'}),
+        ('apps/web/tools', {'.cjs'}),
         ('docs', {'.md', '.json', '.txt', '.csv'}),
-        ('qa', {'.py', '.cjs'}),
-        ('qa/fixtures', {'.md', '.xml', '.gml', '.prj', '.json'}),
+        ('tests', {'.py', '.cjs'}),
+        ('tests/fixtures', {'.md', '.xml', '.gml', '.prj', '.json'}),
         ('tools', {'.py', '.cjs'}),
     ]:
         for path in (ROOT/folder).rglob('*'):
@@ -26,8 +26,8 @@ def selected_files():
                 yield path
     for name in ('package.json', 'package-lock.json', 'next.config.js', 'next-env.d.ts', 'tsconfig.json',
                  'postcss.config.js', 'tailwind.config.ts', '.eslintrc.json', '.gitignore', '.vercelignore', 'vercel.json'):
-        yield ROOT/'gui-v2/frontend'/name
-    for path in (ROOT/'gui-v2/frontend/public').iterdir():
+        yield ROOT/'apps/web'/name
+    for path in (ROOT/'apps/web/public').iterdir():
         if path.is_file() and path.suffix in {'.svg', '.png', '.ico'}: yield path
 
 

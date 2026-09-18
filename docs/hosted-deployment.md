@@ -7,7 +7,7 @@ the visitor's Windows computer. The GitHub repository remains private.
 ## Using the website
 
 1. Download the Windows companion from the website and extract the whole ZIP.
-2. Double-click `Start VULCAN.cmd`. First run installs the pinned Python/GDAL
+2. Double-click `start-companion.cmd`. First run installs the pinned Python/GDAL
    runtime and verifies its package hashes; allow several minutes.
 3. Open the website and click **Connect local companion**. Allow local network
    access if Chrome or Edge asks.
@@ -26,8 +26,8 @@ From the repository root, rebuild the allowlisted companion archive when backend
 or launcher files change:
 
 ```powershell
-python qa/package_companion.py
-cd gui-v2/frontend
+python tests/package_companion.py
+cd apps/web
 npm ci
 npx tsc --noEmit
 npx vercel deploy --prod --yes --scope colony-technologies
