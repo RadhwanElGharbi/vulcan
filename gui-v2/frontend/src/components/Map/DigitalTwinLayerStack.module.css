@@ -1,0 +1,39 @@
+.layout { display:flex; flex-wrap:wrap; align-items:flex-start; justify-content:center; gap:12px; padding:10px 22px 24px; }
+.scene { flex:1 1 520px; min-width:0; max-width:920px; }
+.intro {padding:18px 22px 0;}
+.intro>span {font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:rgba(255,255,255,.5);}
+.intro p {font-size:11px;color:rgba(255,255,255,.28);margin-top:5px;}
+.stack {display:block;width:100%;height:clamp(330px,calc(100vh - 240px),700px);overflow:visible;}
+.guides {fill:none;stroke:rgba(255,255,255,.1);stroke-dasharray:3 7;stroke-width:1;pointer-events:none;}
+.tile {cursor:pointer;outline:none;transform:translateY(0);transition:transform 300ms cubic-bezier(.2,.8,.2,1),filter 300ms;}
+.surface {fill:rgba(var(--tile-color),.045);stroke:rgba(var(--tile-color),.32);stroke-width:1;transition:fill 250ms,stroke 250ms;}
+.edge {fill:rgba(var(--tile-color),.055);stroke:rgba(var(--tile-color),.13);stroke-width:.7;}
+.rim {fill:none;stroke:rgba(var(--tile-color),.4);stroke-width:1;}
+.pattern {fill:none;stroke:rgba(var(--tile-color),.17);stroke-width:1;pointer-events:none;}
+.name {fill:rgba(255,255,255,.7);font-family:inherit;font-weight:600;font-size:16px;letter-spacing:1.4px;pointer-events:none;}
+.meta {fill:rgba(var(--tile-color),.55);font-family:monospace;font-size:9px;letter-spacing:.5px;pointer-events:none;}
+.dot {fill:rgba(var(--tile-color),.6);}
+.tile:hover,.tile:focus-visible {transform:translateY(-12px);filter:drop-shadow(0 8px 12px rgba(0,0,0,.25));}
+.tile:hover .surface,.tile:focus-visible .surface {fill:rgba(var(--tile-color),.11);stroke:rgba(var(--tile-color),.8);}
+.tile:focus-visible .rim {stroke:white;stroke-width:2;}
+.tile.active {transform:translateY(-18px);}
+.tile.active .surface {fill:rgba(var(--tile-color),.12);stroke:rgba(var(--tile-color),.9);}
+.tile.active .name,.tile:hover .name {fill:white;}
+.tile:active {transform:translateY(-8px) scale(.995);transform-origin:center;}
+.caption {text-align:center;font-size:10px;letter-spacing:.1em;color:rgba(255,255,255,.22);margin-top:-14px;}
+.details {flex:1 1 290px;max-width:420px;margin-top:24px;border:1px solid rgba(255,255,255,.08);border-radius:8px;background:rgba(10,12,13,.42);backdrop-filter:blur(16px);animation:reveal 220ms ease-out;max-height:max(140px,calc(56vh - 165px));overflow-y:auto;}
+.details header {padding:14px;border-bottom:1px solid rgba(255,255,255,.06);}
+.details header>span {font-family:monospace;font-size:9px;text-transform:uppercase;letter-spacing:.15em;color:rgba(255,255,255,.3);}
+.details h3 {font-size:16px;color:rgba(255,255,255,.8);margin-top:8px;}
+.details p {font-size:11px;color:rgba(255,255,255,.35);margin-top:4px;}
+.details header button {float:right;color:rgba(255,255,255,.5);font-size:20px;line-height:20px;padding:2px 6px;}
+.details header button:focus-visible {outline:1px solid white;border-radius:3px;}
+@keyframes reveal {from {opacity:0;transform:translateY(8px)}to {opacity:1;transform:translateY(0)}}
+@media(max-width:640px) {.layout{padding:6px 0 24px;gap:0}.scene{flex-basis:100%}.intro{padding-left:20px}.name{font-size:16px;letter-spacing:.5px}.meta{font-size:11px}.details{margin:12px 12px 0;max-width:none;flex-basis:100%}.caption{margin-top:0}}
+@media(prefers-reduced-motion:reduce) {.tile,.surface{transition:none}.tile:hover,.tile:focus-visible,.tile.active,.tile:active{transform:none}.details{animation:none}}
+
+.surface,.edge,.rim,.dot{pointer-events:none}
+.hit{fill:transparent;pointer-events:all;outline:none}
+.tile:has(:focus-visible){transform:translateY(-12px)}
+.tile:has(:focus-visible) .surface{stroke:white;stroke-width:2}
+@media(prefers-reduced-motion:reduce){.tile:has(:focus-visible){transform:none}}

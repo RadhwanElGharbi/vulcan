@@ -1,0 +1,11 @@
+# SoilGrids water-retention interface assessment
+
+Checked 2026-09-17. These products are eligible candidates with an accessible public interface. Implementation and scientific qualification remain pending; they are not included in the registered-product count.
+
+ISRIC publishes 1,000 m mean grids for water content at 10, 33 and 1,500 kPa, with six depth intervals and SHA-256 inventories. The directories use `wv0010`, `wv0033` and `wv1500`; the FAQ's shortened `wv003` spelling is not the downloadable identifier. The initial inspection retained all three checksum responses and downloaded the first 10 kPa grid, whose hash matches the publisher inventory. [Inspection evidence](../../qa/soilgrids-water-assessment.json), [official directory](https://files.isric.org/soilgrids/latest/data_aggregated/1000m/wv0010/).
+
+The integer encoding represents 0.001 cubic centimetres per cubic centimetre. Dividing a stored value by ten gives percent; the analytical export should preserve the encoded values and document this relationship. The source GeoTIFF declares the mapped units in metadata while its band unit is blank, so a reader must reconcile both with the product contract. [ISRIC layer documentation](https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_01.html).
+
+ISRIC describes these files as aggregations of the 250 m mean predictions, and separately states that uncertainty at coarser resolution remains under development. The reviewed overview does not establish exact aggregation weights or boundary/NoData treatment. Preserve the provider's coarse grid and expose those limitations rather than reconstructing a finer product. The February 2022 announcement and June 2022 file modification dates do not establish local observation dates. [Provider release announcement](https://isric.org/news/coarse-resolution-soilgrids-property-maps-released-1000-m-and-5000-m).
+
+The access documentation states CC BY 4.0 for SoilGrids. Preserve attribution and the retained terms with each eventual plan. Give these coarse products separate identities from 250 m SoilGrids and HWSD; none is an automatic fallback for another. The 5,000 m products require their own header/interface assessment. [Access documentation](https://docs.isric.org/globaldata/soilgrids/SoilGrids_faqs_02.html).

@@ -1,0 +1,15 @@
+name: zeus
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - gdal=3.13
+  - fiona
+  - pyproj
+  - shapely
+  - numpy
+  - pillow
+  - curl
+  - pip
+  - pip:
+      - -r gui-v2/backend/requirements.txt
